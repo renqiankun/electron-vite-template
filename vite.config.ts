@@ -38,14 +38,14 @@ export default defineConfig(({ command, mode }: any) => {
         },
         // 编译main文件
         {
-          // entry: './electron/main/index.ts',
+          entry: './electron/main/index.ts',
           vite: {
             plugins: [ !isProduction && notBundle()],
             build: {
               // outDir: './dist-electron/main',
               rollupOptions: {
                 // 动态生成的入口文件
-                input: getEntries(path.resolve(__dirname, 'electron/main')),
+                // input: getEntries(path.resolve(__dirname, 'electron/main')),
                 output: {
                   dir: 'dist-electron/main', // 输出目录
                   entryFileNames: '[name].js', // 根据目录输出文件
