@@ -1,5 +1,6 @@
 <template>
   <el-dialog v-model="dialogVisible" title="提示" width="30%" center>
+    <div>打两个不同版本测试，并检查版本地址的指向新版本目录</div>
     <div>当前版本{{ pkg.version }}</div>
     <el-button @click="checkHand">检查</el-button>
     <el-button :disabled="!hasNewVersion" @click="download">下载</el-button>

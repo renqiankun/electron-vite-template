@@ -46,8 +46,11 @@ A modern desktop application template based on **Electron + Vite + Drizzle ORM +
    ```
    Add the following content:
    ```ini
+   ELECTRON_MIRROR=https://registry.npmmirror.com/-/binary/electron/
+   home=https://npmmirror.com
    msvs_version=2022
-   python=python3.7
+   python=python
+   registry=https://registry.npmmirror.com/
    ```
 5. **Globally install `node-gyp`**
    ```sh
@@ -128,6 +131,7 @@ Database migrations are handled differently for **development** and **production
 ✅ **App Update with electron-updater Example**  
 ✅ **Add Logger**  
 ⬜ **Multi-Window Example**  
+⬜ **bytecode**
 
 ---
 

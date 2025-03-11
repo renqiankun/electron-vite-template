@@ -2,18 +2,20 @@
   "name": "electron-vite-template",
   "private": true,
   "version": "0.0.1",
-  "type": "module",
+  "type": "commonjs",
   "main": "./dist-electron/main/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite",
     "build": " npm run generateSchama && vue-tsc && cross-env NODE_ENV=production vite build &&  electron-builder ",
     "preview": "vite preview",
     "generateSchama": "npx drizzle-kit generate",
-    "syncSchema": "npm rebuild better-sqlite3 && npx drizzle-kit push && npx electron-rebuild  -f -w better-sqlite3"
+    "syncSchema": "npm rebuild better-sqlite3 && npx drizzle-kit push && npx electron-rebuild  -f -w better-sqlite3",
+    "build:bytecode": "bytenode --compile dist-electron/main/index.js --output dist-electron/main"
   },
   "dependencies": {
     "axios": "^1.5.0",
     "better-sqlite3": "^11.8.1",
+    "bytenode": "^1.5.7",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
     "electron-log": "^5.3.0",

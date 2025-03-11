@@ -46,8 +46,11 @@
    ```
    添加以下内容：
    ```ini
+   ELECTRON_MIRROR=https://registry.npmmirror.com/-/binary/electron/
+   home=https://npmmirror.com
    msvs_version=2022
-   python=python3.7
+   python=python
+   registry=https://registry.npmmirror.com/
    ```
 5. **全局安装 `node-gyp`**
    ```sh
@@ -130,6 +133,7 @@ npm run build                # 构建项目
 ✅ **app升级 electron-updater示例**
 ✅ **添加logger**
 ⬜ **多窗口示例**
+⬜ **bytecode代码加密**
 
 ---
 

@@ -35,7 +35,7 @@ const createWindow = () => {
     // 隐藏顶部bar，隐藏后需自定义关闭，隐藏等按钮
     // titleBarStyle: 'hidden',
     webPreferences: {
-      preload: path.join(preloadDir, 'index.mjs'),
+      preload: path.join(preloadDir, 'index.js'),
       sandbox: false,
       nodeIntegration: false,  // 关闭 nodeIntegration（更安全）
       contextIsolation: true,  // 启用 contextIsolation

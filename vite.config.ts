@@ -27,9 +27,10 @@ export default defineConfig(({ command, mode }: any) => {
                 // 动态生成的入口文件
                 input: getEntries(path.resolve(__dirname, 'electron/preload')),
                 output: {
+                  format: 'cjs',
                   dir: 'dist-electron/preload', // 输出目录
-                  entryFileNames: '[name].mjs', // 根据目录输出文件
-                  chunkFileNames: '[name].mjs' // 分离的 chunk 文件
+                  entryFileNames: '[name].js', // 根据目录输出文件
+                  chunkFileNames: '[name].js' // 分离的 chunk 文件
                 },
                 external: Object.keys(pkg.dependencies)
               }
