@@ -45,7 +45,7 @@ export default defineConfig(({ command, mode }: any) => {
             build: {
               // outDir: './dist-electron/main',
               rollupOptions: {
-                // 动态生成的入口文件
+                // 动态生成的入口文件, 会保留目录、文件结构
                 // input: getEntries(path.resolve(__dirname, 'electron/main')),
                 output: {
                   dir: 'dist-electron/main', // 输出目录

@@ -54,6 +54,8 @@ declare interface Window {
     fs: fsProxy
     env: 'development' | 'production'
     update: AppUpdate
-    logger: Logger
+    logger: Logger,
+    /**创建一个window 返回window.id */
+    createWindow:()=>Promise<string>
   }
 }

@@ -1,18 +1,19 @@
 // main.js
 import path from 'path'
 import { Menu, Tray } from 'electron'
-import  { app, BrowserWindow }  from 'electron'
+import { app, BrowserWindow } from 'electron'
 
 // 初始化数据库handler
-import { dbInit } from "./dbInit";
-import dotenv  from 'dotenv'
-import { getDirname } from './utils';
+import { dbInit } from './dbInit'
+import dotenv from 'dotenv'
+import { getDirname } from './utils'
 import './auto-update/index'
 import logger from './logger'
+import { initWindowPool } from './window-pool'
 const __dirname = getDirname(import.meta.url)
 
-const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
-dotenv.config({ path: path.resolve(__dirname,'../../', envFile) });
+const envFile = `.env.${process.env.NODE_ENV || 'development'}`
+dotenv.config({ path: path.resolve(__dirname, '../../', envFile) })
 /**
  * 根目录 asar资源目录，dist、dist-electron都是在此目录下
  * electron-builder中files字段配置的文件都会放入此目录
@@ -22,12 +23,12 @@ const rootDir = path.join(__dirname, '../../')
 const electronDist = path.join(__dirname, '../../dist')
 // 打包后preload目录
 const preloadDir = path.join(__dirname, '../preload')
-
-let mainWindow;
+let windowPool
+let mainWindow
 const createWindow = () => {
   const iconPath = path.join(rootDir, './assets/icon/tray.png')
 
-   mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
     center: true,
@@ -37,8 +38,8 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(preloadDir, 'index.js'),
       sandbox: false,
-      nodeIntegration: false,  // 关闭 nodeIntegration（更安全）
-      contextIsolation: true,  // 启用 contextIsolation
+      nodeIntegration: false, // 关闭 nodeIntegration（更安全）
+      contextIsolation: true // 启用 contextIsolation
     }
   })
   if (process.env.VITE_DEV_SERVER_URL) {
@@ -60,6 +61,7 @@ app.whenReady().then(async () => {
   await dbInit()
   createWindow()
   addTray()
+  windowPool = initWindowPool()
   app.on('activate', () => {
     // 在 macOS 系统内, 如果没有已开启的应用窗口
     // 点击托盘图标时通常会重新创建一个新窗口
@@ -71,8 +73,9 @@ app.whenReady().then(async () => {
  * 所有窗口被关闭时, mac上试用command + Q 关闭窗口
  */
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') app.quit()
 })
+app.on('before-quit', () => windowPool.destroyAll());
 
 // 系统托盘
 let tray
@@ -82,9 +85,7 @@ let tray
 const addTray = () => {
   const iconPath = path.join(rootDir, './assets/icon/tray.png')
   tray = new Tray(iconPath)
-  const contextMenu = Menu.buildFromTemplate([
-    { label: '退出', click: () => app.quit() },
-  ])
+  const contextMenu = Menu.buildFromTemplate([{ label: '退出', click: () => app.quit() }])
   tray.setToolTip('测试应用')
   tray.setContextMenu(contextMenu)
 }

@@ -1,6 +1,7 @@
 <template>
   <div style="margin-bottom: 10px;">
     <el-button @click="checkVersion">检查app版本</el-button>
+    <el-button @click="createWindowHand">创建window</el-button>
   </div>
   <el-button @click="getUserListHand">查询用户</el-button>
   <el-button @click="addHand">新增用户</el-button>
@@ -75,6 +76,11 @@
    */
   const checkVersion = () => {
     checkRef.value.init()
+  }
+
+  const createWindowHand = async ()=>{
+    let windowId = await window.electronAPI.createWindow()
+    console.log(windowId)
   }
 </script>
 
