@@ -29,7 +29,8 @@
         "mirror": "https://npmmirror.com/mirrors/electron/"
     },
     "mac": {
-        "icon": "build/icons/icon.icns",
+        // mac下图标 需制作icns格式
+        "icon": "assets/icon/icon.icns",
         "target": [
             "dmg"
         ]

@@ -65,9 +65,9 @@
 npm install                  # 安装依赖
 npm rebuild                  # 重新编译本地依赖
 npx electron-rebuild -f -w better-sqlite3  # 适配 Electron 原生模块，可选指定模块名 如：better-sqlite3
-npm run syncSchema           # 先同步数据库 Schema
-npm run dev                  # 启动项目
-npm run build                # 构建项目
+npm run syncSchema           # 先同步开发数据库 Schema
+npm run dev                  # 启动项目 首次启动需先执行 npm run syncSchema
+npm run build                # 构建项目 此处会先生成数据库升级文件
 ```
 
 ---
@@ -75,25 +75,33 @@ npm run build                # 构建项目
 ## 🔨 开发指南
 
 ### **📌 本地数据库同步**
-- **修改数据库 Schema 后执行**：
+- **修改数据库 Schema结构，快速同步本地数据库结构 执行**：
   ```sh
   npm run syncSchema
+
+  此命令仅可快速同步数据库结构字段，但不生成升级文件，build时会先生成升级文件
   ```
-  该命令包含以下三步：
+   
+
+  ```sh
+  npm run syncSchema-old  （此原方式废弃，速度慢）
+
+  该命令包含以下三步： 
   1. `npm rebuild` - 重新编译 `better-sqlite3` 适配本地 Node.js 版本
   2. `npx drizzle-kit push` - 将 `schema` 直接同步到本地数据库
   3. `npx electron-rebuild -f -w better-sqlite3` - 重新编译 `better-sqlite3` 适配 Electron 版本
-
+  ```
 ### **📌 打包时数据库升级**
 
-1. 执行打包： 会先执行 npm run generateSchama,生成数据库升级文件
+1. 执行打包： 会先执行 npm run generateSchama,生成数据库升级文件，数据库仍指向开发环境数据库.env.db，通过开发数据库结构生成升级文件
+  
    ```sh
    npm run build
    ```
 
    ```
    数据库文件区分开发环境.enb.db及生产环境.db两个文件，以应对drizzel-orm在本地开发
-   同时本地打包安装时，数据库结构升级问题，如果使用同一个文件，则本地安装生产包时先删除已存在的数据库文件或修改为其他名称
+   同时本地安装生产包时，开发数据库文件结构已经是最新导致安装包升级数据库结构失败，如果使用同一个文件，则本地安装生产包时先删除已存在的数据库文件或备份为其他名称
    ```
 
 ---
@@ -118,9 +126,7 @@ npm run build                # 构建项目
   npm run syncSchema
   ```
   **执行的操作**：
-  - 重新编译 `better-sqlite3` 
-  - 使用 `drizzle-kit push` 直接同步数据库
-  - 重新适配 Electron 版本 
+  - 同步开发数据库字段结构 
 
 #### **3️⃣ 迁移文件管理**
 - `migrations` 目录用于存放数据库升级文件

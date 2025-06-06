@@ -39,15 +39,16 @@ export default defineConfig(({ command, mode }: any) => {
         },
         // 编译main文件
         {
-          entry: './electron/main/index.ts',
+          // entry: './electron/main/index.ts', // 1 使用整体入口编译
           vite: {
             plugins: [ !isProduction && notBundle()],
             build: {
-              // outDir: './dist-electron/main',
+              // outDir: './dist-electron/main',   // 1 使用整体入口编译
               rollupOptions: {
                 // 动态生成的入口文件, 会保留目录、文件结构
-                // input: getEntries(path.resolve(__dirname, 'electron/main')),
+                input: getEntries(path.resolve(__dirname, 'electron/main')),  // 2 使用动态入口编译
                 output: {
+                  format: 'cjs',     // 2 使用动态入口编译
                   dir: 'dist-electron/main', // 输出目录
                   entryFileNames: '[name].js', // 根据目录输出文件
                   chunkFileNames: '[name].js' // 分离的 chunk 文件

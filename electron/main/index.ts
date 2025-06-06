@@ -9,7 +9,7 @@ import dotenv from 'dotenv'
 import { getDirname } from './utils'
 import './auto-update/index'
 import logger from './logger'
-import { initWindowPool } from './window-pool'
+import WindowPool, { initWindowPool } from './window/window-pool'
 const __dirname = getDirname(import.meta.url)
 
 const envFile = `.env.${process.env.NODE_ENV || 'development'}`
@@ -23,7 +23,7 @@ const rootDir = path.join(__dirname, '../../')
 const electronDist = path.join(__dirname, '../../dist')
 // 打包后preload目录
 const preloadDir = path.join(__dirname, '../preload')
-let windowPool
+let windowPool: WindowPool
 let mainWindow
 const createWindow = () => {
   const iconPath = path.join(rootDir, './assets/icon/tray.png')
@@ -65,12 +65,13 @@ app.whenReady().then(async () => {
   app.on('activate', () => {
     // 在 macOS 系统内, 如果没有已开启的应用窗口
     // 点击托盘图标时通常会重新创建一个新窗口
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === windowPool.available?.length) createWindow()
   })
 })
 
 /**
  * 所有窗口被关闭时, mac上试用command + Q 关闭窗口
+ * 因缓冲池中存在窗口，所以不退出程序
  */
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()

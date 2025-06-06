@@ -1,4 +1,8 @@
-// window-pool.ts
+/**
+ * window-pool.ts
+ * 此窗口池导致的问题为 始终存在一个隐藏的窗口，导致判断窗口length始终大于1，
+ * 在判断窗口是否全部关闭时，无法正确判断，如window-all-closed 不会触发需考虑使用其他方式判断
+ */
 import { BrowserWindow, BrowserWindowConstructorOptions, ipcMain } from 'electron'
 
 /**
@@ -8,7 +12,10 @@ import { BrowserWindow, BrowserWindowConstructorOptions, ipcMain } from 'electro
 export default class WindowPool {
   private browserOpts: BrowserWindowConstructorOptions
   private loadTarget: string | (() => string)
-  private available: BrowserWindow[] = []
+  /**
+   * 池中可用窗口长度
+   */
+  public available: BrowserWindow[] = []
   private inUse: Set<BrowserWindow> = new Set()
 
   constructor(

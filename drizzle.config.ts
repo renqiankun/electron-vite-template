@@ -3,12 +3,13 @@ import path, { dirname } from 'path'
 import { existsSync, mkdirSync } from 'fs'
 
 import { APP_NAME, DB_CONFIG } from './electron/main/utils/constants'
-// 需要确认databasePath 是否指向正确的数据库文件
+// 需要确认databasePath 是否指向正确的数据库文件 DB_CONFIG.dbFileName区分了开发、生产文件名
 const databasePath = path.join(process.env.APPDATA ?? '', APP_NAME, DB_CONFIG.dbFileName)
 /**
  * 生成数据库文件夹
  */
 const generateDbPath = (dirString: string) => {
+  console.warn('databasePath: ', databasePath)
   try {
     const dir = dirname(dirString)
     if (!existsSync(dir)) {

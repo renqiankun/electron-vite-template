@@ -1,6 +1,8 @@
 import { app } from "electron";
 import { fileURLToPath } from 'url';
-import path from 'path';
+import path, { dirname } from 'path';
+import { existsSync, mkdirSync } from "fs";
+import log from "../logger";
 /**
  * 系统目录
  * 获取用户目录下appdata目录，win下指向C:\Users\用户名\AppData\Roaming
@@ -53,3 +55,21 @@ export function getDirname(importMetaUrl) {
 
 export const isDev = process.env.NODE_ENV === 'development'
 export const isProd = process.env.NODE_ENV === 'production'
+
+
+
+
+/**
+ * 生成文件夹
+ */
+export const generateDirPath = (dirString:string) => {
+  try {
+    const dir = dirname(dirString)
+    if (!existsSync(dir)) {
+      mkdirSync(dir, { recursive: true })
+    }
+  } catch (error) {
+    log.error('Database connection error:', error)
+    throw error
+  }
+}

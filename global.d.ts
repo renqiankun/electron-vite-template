@@ -46,7 +46,7 @@ interface Logger {
   silly: (msg: string) => Promise<void>
 }
 /**
- * renderer注入electron
+ * preload中 renderer注入electron
  */
 declare interface Window {
   electronAPI: {

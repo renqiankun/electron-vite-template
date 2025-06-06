@@ -8,6 +8,27 @@
       "when": 1740645046311,
       "tag": "0000_narrow_crusher_hogan",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1749113260417,
+      "tag": "0001_daily_sleepwalker",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1749172665654,
+      "tag": "0002_tranquil_paibok",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1749175214230,
+      "tag": "0003_mature_absorbing_man",
+      "breakpoints": true
     }
   ]
 }

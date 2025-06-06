@@ -1,36 +1,42 @@
-[ English](README.md) | [ 中文](README.zh.md)
+Here is the English version of your documentation:
+
+---
+
+[English](README.md) | [中文](README.zh.md)
+
 # 🚀 Electron + Vite + Drizzle ORM + Better-SQLite3
 
 A modern desktop application template based on **Electron + Vite + Drizzle ORM + Better-SQLite3**.
 
 ## ✨ Features
-- **Drizzle ORM**: A modern, lightweight ORM solution
-- **Vue 3**: Used as the UI layer (can be replaced as needed)
-- **Electron v34.0.0** + **Node.js v20.18.0**
-- **Better-SQLite3**: High-performance, synchronous SQLite database library
+
+* **Drizzle ORM** – A modern and lightweight ORM solution
+* **Vue 3** for the UI layer (can be replaced as needed)
+* **Electron v34.0.0** + **Node.js v20.18.0**
+* **Better-SQLite3** – A performant, synchronous SQLite library
 
 ---
 
-## 📂 Directory Structure
+## 📂 Project Structure
 
 ```bash
 📦 Project Root
-├── assets                 # Static resources (including app icons for packaging)
+├── assets                 # Static assets (including packaged app icons)
 ├── electron               # Electron-related code
 │   ├── main               # Main process code
-│   │   ├── auto-update    # electron-updater auto update
-│   │   ├── db             # Database-related code
-│   │   ├── router         # Routes (provides access to the database)
+│   │   ├── auto-update    # electron-updater related code
+│   │   ├── db             # Database logic
+│   │   ├── router         # Routes providing DB access interfaces
 │   │   ├── utils.ts       # Utility functions
 │   │   ├── dbServicesInit.ts  # Database initialization logic
-│   │   ├── index.ts       # Main process entry file
+│   │   ├── index.ts       # Entry file of the main process
 │   ├── preload            # Preload scripts
 ├── migrations             # Database migration files
-├── public                 # Vue public resources
+├── public                 # Vue public assets
 ├── src                    # Vue source code
-├── drizzle.config.ts       # Drizzle ORM migration configuration
-├── electron-builder.json   # Electron build configuration
-├── vite.config.ts         # Vite build configuration
+├── drizzle.config.ts      # Drizzle ORM migration config
+├── electron-builder.json  # Electron build config
+├── vite.config.ts         # Vite build config
 ```
 
 ---
@@ -38,13 +44,16 @@ A modern desktop application template based on **Electron + Vite + Drizzle ORM +
 ## ⚙️ Environment Setup
 
 1. **Node.js** version `v20.18.0`
-2. **Visual Studio 2022** (requires **Desktop development with C++** component)
+2. **Visual Studio 2022** (Install the **Desktop development with C++** workload)
 3. **Python 3.7**
 4. **Configure environment variables**
+
    ```sh
    npm config edit
    ```
-   Add the following content:
+
+   Add the following:
+
    ```ini
    ELECTRON_MIRROR=https://registry.npmmirror.com/-/binary/electron/
    home=https://npmmirror.com
@@ -52,88 +61,108 @@ A modern desktop application template based on **Electron + Vite + Drizzle ORM +
    python=python
    registry=https://registry.npmmirror.com/
    ```
-5. **Globally install `node-gyp`**
+5. **Install `node-gyp` globally**
+
    ```sh
    npm install -g node-gyp
    ```
 
 ---
 
-## 🚀 Start the Project
+## 🚀 Getting Started
 
 ```sh
 npm install                  # Install dependencies
-npm rebuild                  # Rebuild local dependencies
-npx electron-rebuild -f -w better-sqlite3  # Adapt Electron native modules (optional: specify module name, e.g., better-sqlite3)
-npm run syncSchema           # Sync the database schema
-npm run dev                  # Start the project
-npm run build                # Build the project
+npm rebuild                  # Rebuild native dependencies
+npx electron-rebuild -f -w better-sqlite3  # Rebuild native modules for Electron (e.g., better-sqlite3)
+npm run syncSchema           # Sync local development database schema
+npm run dev                  # Start development (run syncSchema first)
+npm run build                # Build the app (will generate migration files first)
 ```
 
 ---
 
 ## 🔨 Development Guide
 
-### **📌 Local Database Synchronization**
-- **After modifying the database schema, execute:**
+### **📌 Syncing the Local Database**
+
+* **To sync schema changes to your local database**, run:
+
   ```sh
   npm run syncSchema
+
+  This command quickly syncs schema fields without generating migration files.
+  Migration files are automatically generated during the build.
   ```
-  This command includes three steps:
-  1. `npm rebuild` - Rebuild `better-sqlite3` to match the local Node.js version
-  2. `npx drizzle-kit push` - Sync the schema directly to the local database
-  3. `npx electron-rebuild -f -w better-sqlite3` - Rebuild `better-sqlite3` for Electron compatibility
 
-### **📌 Database Upgrade During Packaging**
+  ```sh
+  npm run syncSchema-old  # (Deprecated and slower)
 
-1. Run the build command, which will first execute `npm run generateSchema` to generate database migration files:
+  This runs:
+  1. `npm rebuild` – Rebuild better-sqlite3 for the local Node.js version
+  2. `npx drizzle-kit push` – Push schema to local database
+  3. `npx electron-rebuild -f -w better-sqlite3` – Rebuild for Electron compatibility
+  ```
+
+### **📌 Database Migration on Build**
+
+1. Run the build command to generate migration files using the development database structure:
+
    ```sh
    npm run build
    ```
 
    ```
-   The database file is separated into development (`.env.db`) and production (`.db`) versions.
-   This prevents issues when using Drizzle ORM for both local development and packaged installations.
-   If using the same file, remove the existing database file or rename it before installing the production package.
+   The development (.env.db) and production (.db) database files are separate to avoid issues 
+   with migration failures when installing the production app over an already-updated local dev DB.
+   If using the same file, delete or back up the existing local file before installing the production app.
    ```
 
 ---
 
-### **📌 Preload Script Usage**
-1. **`webPreferences` disables Node.js in the renderer, enables context isolation, but does not enable sandbox mode**, requiring native modules or IPC communication to be exposed in `preload`.
-2. **Preload files are compiled as `.mjs` (ES module format)**, and `import` is used to include other modules internally.
+### **📌 Preload Script Notes**
 
-### **📌 Database Migration Strategy**
-Database migrations are handled differently for **development** and **production** environments:
+1. **`webPreferences` disables Node.js in renderer and enables context isolation** (sandbox is not enabled). Native modules and IPC must be exposed through preload scripts.
+2. **Preload files are compiled as `.mjs` using ES module syntax**, with `import` used for dependencies.
 
-#### **1️⃣ Production Environment**
-- **Database migration files are automatically generated during the build process**, no manual intervention required.
-- Ensure that `drizzle.config.ts` points to the correct database file.
+### **📌 Database Migration Handling**
 
-#### **2️⃣ Development Environment**
-- **After modifying the schema, run:**
+Migrations differ between **development** and **production** environments:
+
+#### **1️⃣ Production**
+
+* **Migration files are automatically generated during build**
+* Make sure `drizzle.config.ts` points to the correct local database path
+
+#### **2️⃣ Development**
+
+* After schema changes, run:
+
   ```sh
   npm run syncSchema
   ```
-  **This executes the following steps:**
-  - Rebuild `better-sqlite3`
-  - Use `drizzle-kit push` to directly sync the database
-  - Rebuild `better-sqlite3` for Electron compatibility
 
-#### **3️⃣ Migration File Management**
-- The `migrations` directory stores database migration files.
-- **Do not delete this directory**, as it may cause data loss.
+  This:
+
+  * Syncs the schema with the local development database
+
+#### **3️⃣ Managing Migration Files**
+
+* The `migrations` directory stores all migration files
+* **Do not delete** this directory to avoid potential data loss
 
 ---
 
-## 📌 To-Do List
-✅ **Database Communication Example**  
-✅ **App Update with electron-updater Example**  
-✅ **Add Logger**  
-⬜ **Multi-Window Example**  
-⬜ **bytecode**
+## 📌 TODO List
+
+✅ **Database communication example**
+✅ **App auto-updater with electron-updater**
+✅ **Add logger**
+⬜ **Multi-window example**
+⬜ **Bytecode encryption**
 
 ---
 
 🎉 **Enjoy coding with Electron + Vite + Drizzle ORM!** 🚀
 
+---

@@ -1,0 +1,1 @@
+ALTER TABLE `users` RENAME COLUMN "age" TO "age222";
