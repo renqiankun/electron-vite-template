@@ -54,7 +54,7 @@
    ```
 5. **全局安装 `node-gyp`**
    ```sh
-   npm install -g node-gyp
+   npm install -g node-gyp@10.1.0  或 安装到项目中 npm install -D node-gyp@10.1.0  // 此版本对应python3.7，node-gyp高版本需更高版本python
    ```
 
 ---
