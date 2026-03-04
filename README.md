@@ -64,7 +64,7 @@ A modern desktop application template based on **Electron + Vite + Drizzle ORM +
 5. **Install `node-gyp` globally**
 
    ```sh
-   npm install -g node-gyp
+   npm install -g node-gyp@10.1.0  or  npm install -D node-gyp@10.1.0   // python need 3.7
    ```
 
 ---
