@@ -31,9 +31,13 @@
     "mac": {
         // mac下图标 需制作icns格式
         "icon": "assets/icon/icon.icns",
-        "target": [
-            "dmg"
-        ]
+        "target": [{
+            "target": "dmg",
+            "arch": [
+                "x64"
+            ]
+        }],
+        "artifactName": "${productName}_${version}_${arch}.${ext}"
     },
     "dmg": {
         "contents": [{
@@ -58,6 +62,33 @@
             ]
         }],
         "artifactName": "${productName}_${version}.${ext}"
+    },
+    "linux": {
+        "icon": "assets/icon/tray.png",
+        "target": [
+            //{
+            //    "target": "AppImage",
+            //    "arch": [
+            //        "x64",
+            //        "arm64"
+            //    ]
+            //},
+            {
+                "target": "deb",
+                "arch": [
+                    "x64",
+                   // "arm64"
+                ]
+            },
+           // {
+           //     "target": "rpm",
+           //     "arch": [
+           //         "x64",
+           //         "arm64"
+           //     ]
+           // }
+        ],
+        "artifactName": "${productName}_${version}_${arch}.${ext}"
     },
     "nsis": {
         "oneClick": false,

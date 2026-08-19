@@ -33,6 +33,15 @@
 ├── vite.config.tsn        # vite 打包配置
 ```
 
+配置镜像 , 不需要配置 npm config edit
+openKylin / Linux：
+export ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
+
+Windows PowerShell：
+$env:ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/"
+
+Windows CMD：
+set ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
 ---
 
 ## ⚙️ 环境配置

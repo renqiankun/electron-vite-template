@@ -9,7 +9,7 @@
     "build": " npm run generateSchama && vue-tsc && cross-env NODE_ENV=production vite build &&  electron-builder ",
     "preview": "vite preview",
     "generateSchama": "cross-env NODE_ENV=development npx drizzle-kit generate",
-    "syncSchema": "set ELECTRON_RUN_AS_NODE=true && cross-env NODE_ENV=development electron ./node_modules/drizzle-kit/bin.cjs push",
+    "syncSchema": "cross-env ELECTRON_RUN_AS_NODE=true NODE_ENV=development electron ./node_modules/drizzle-kit/bin.cjs push",
     "syncSchema-old": "npm rebuild better-sqlite3 && cross-env NODE_ENV=development npx drizzle-kit push && npx electron-rebuild  -f -w better-sqlite3",
     "build:bytecode": "bytenode --compile dist-electron/main/index.js --output dist-electron/main"
   },
